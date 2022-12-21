@@ -15,17 +15,19 @@ const AdventDay = ({ day, startDay }) => {
       className="relative aspect-square w-full overflow-hidden rounded md:w-52"
       onClick={handleClick}
     >
-      <div
-        className="absolute h-full w-full bg-cover "
-        style={{
-          backgroundImage:
-            "url('data:image/jpeg;base64, " + day?.imageB64 + "')",
-        }}
-      >
-        <p className=" absolute inset-x-4 bottom-4 rounded bg-slate-100/80 p-4 text-lg font-bold">
-          {day.text}
-        </p>
-      </div>
+      {day?.imageB64 && (
+        <div
+          className="absolute h-full w-full bg-cover "
+          style={{
+            backgroundImage:
+              "url('data:image/jpeg;base64, " + day.imageB64 + "')",
+          }}
+        >
+          <p className=" absolute inset-x-4 bottom-4 rounded bg-slate-100/80 p-4 text-lg font-bold">
+            {day.text}
+          </p>
+        </div>
+      )}
       <div
         className={
           "relative z-10 flex h-full w-full items-center justify-center transition-opacity duration-500 " +

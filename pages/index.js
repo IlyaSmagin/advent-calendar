@@ -158,9 +158,7 @@ export default function Home() {
           </div>
         </form>
         <div>
-          <Link href="/calendar/Latest-by-lalacode-e36c7975-b65a-4044-a29e-ca147c4cb455">
-            TEST CALENDAR
-          </Link>
+          <Link href="/calendar/">TEST CALENDAR</Link>
         </div>
       </main>
     </>

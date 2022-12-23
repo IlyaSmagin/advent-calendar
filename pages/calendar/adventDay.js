@@ -6,7 +6,7 @@ const AdventDay = ({ day, startDay }) => {
   const todayIs = Math.round(Date.now() / oneDay);
   const handleClick = (e) => {
     e.preventDefault;
-    if (todayIs > Number(day.index) + Number(startDay)) {
+    if (todayIs > Number(day.number) + Number(startDay)) {
       setIsOpened((prev) => !prev);
     }
   };
@@ -31,15 +31,15 @@ const AdventDay = ({ day, startDay }) => {
           <div
             className={
               "relative z-10 flex h-full w-full items-center justify-center transition-opacity duration-500 " +
-              (day.index % 2 === 0
+              (day.number % 2 === 0
                 ? "bg-red"
-                : day.index % 3 === 0
+                : day.number % 3 === 0
                 ? "bg-green"
                 : "bg-slate") +
               (isOpened === false ? " opacity-100" : " opacity-0")
             }
           >
-            <h2 className="text-6xl font-semibold">{dayIs + day.index}</h2>
+            <h2 className="text-6xl font-semibold">{dayIs + day.number - 1}</h2>
           </div>
         </div>
       ) : (

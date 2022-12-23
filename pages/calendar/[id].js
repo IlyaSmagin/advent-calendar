@@ -12,6 +12,8 @@ const Calendar = ({ data }) => {
       .then((imagesData) => {
         /* imagesData.calendarCells.map((day, index) => (day.index = index));
         imagesData.calendarCells.sort((a, b) => 0.5 - Math.random()); */
+
+        imagesData.calendarCells.sort(() => Math.random() - 0.5);
         setImagesData(imagesData);
       });
   }, []);
@@ -19,13 +21,13 @@ const Calendar = ({ data }) => {
   return (
     <>
       <header className="container m-20 mx-auto flex flex-col items-center justify-center">
-        <h2 className="block text-6xl">Advent of {data.title}</h2>
+        <h2 className="block text-6xl">Advent of {data?.title}</h2>
         <h4 className="mt-4 block text-2xl italic">
           from your friend
-          <span> {data.author}</span>
+          <span> {data?.author}</span>
         </h4>
       </header>
-      <main className="mx-auto grid w-5/6 grid-cols-1 justify-items-center gap-4 sm:grid-cols-2 md:grid-cols-3">
+      <main className="mx-auto grid w-5/6 grid-cols-1 justify-items-center gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {imagesData ? (
           imagesData.calendarCells.map((day, index) => {
             return (
@@ -33,7 +35,7 @@ const Calendar = ({ data }) => {
             );
           })
         ) : (
-          <div className="bg-red relative col-span-3 flex h-52 w-full items-center justify-center overflow-hidden rounded text-5xl italic">
+          <div className="bg-red relative col-span-12 flex h-52 w-full items-center justify-center overflow-hidden rounded text-5xl italic">
             Loading
           </div>
         )}
@@ -46,16 +48,16 @@ export async function getServerSideProps(context) {
   const res = await fetch(
     "https://adventcalendar-legoushka.amvera.io/calendar/data/" + queryString
   );
-  const data = await res.json();
-  const initData = {
-    title: data.title,
-    author: data.author,
-    startDate: data.startDate,
-    daysDyration: data.daysDyration,
+  const jsonData = await res.json();
+  const data = {
+    title: jsonData.title,
+    author: jsonData.author,
+    startDate: jsonData.startDate,
+    daysDuration: jsonData.daysDuration,
     id: queryString,
   };
   return {
-    props: { initData }, // will be passed to the page component as props
+    props: { data }, // will be passed to the page component as props
   };
 }
 

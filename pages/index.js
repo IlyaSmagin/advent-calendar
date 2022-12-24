@@ -2,21 +2,29 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { Inter } from "@next/font/google";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  const [newCalendarUrl, setNewCalendarUrl] = useState(null);
   const [adventImages, setadventImages] = useState([]);
+  const [adventEncodedImages, setAdventEncodedImages] = useState([]);
   const [inputs, setInputs] = useState({
     adventTitle: "Memorable moments",
     adventAuthor: "Secret Santa",
   });
-
+  const [formData, setFormData] = useState({
+    title: "Memorable moments",
+    author: "Secret Santa",
+    startDate: 1,
+    daysDuration: 0,
+    calendarCells: [],
+  });
   function handleUpdate(e, indexToChange) {
     const replaceImg = adventImages.map((image, index) => {
       if (indexToChange === index) {
-        // Increment the clicked counter
+        encodeImageFileAsURL(e.target.files[0], index);
         return URL.createObjectURL(e.target.files[0]);
       } else {
         // The rest haven't changed
@@ -26,10 +34,8 @@ export default function Home() {
     setadventImages(replaceImg);
   }
   function handleAdd(e) {
-    setadventImages((list) => [
-      ...list,
-      URL.createObjectURL(e.target.files[0]),
-    ]);
+    encodeImageFileAsURL(e.target.files[0], adventImages.length);
+    setadventImages((list) => [...list, e.target.files[0]]);
   }
 
   const handleChange = (event) => {
@@ -37,15 +43,81 @@ export default function Home() {
     const value = event.target.value;
     setInputs((values) => ({ ...values, [name]: value }));
   };
+
+  function encodeImageFileAsURL(image, index) {
+    let reader = new FileReader();
+    reader.onloadend = function () {
+      const base64String = reader.result
+        .replace("data:", "")
+        .replace(/^.+,/, "");
+      setAdventEncodedImages((encodedArray) => [
+        ...encodedArray,
+        (encodedArray.index = base64String),
+      ]);
+      console.log("encoded", index);
+    };
+    reader.readAsDataURL(image);
+  }
+  useEffect(() => {
+    let tmpCalCells = adventEncodedImages.map((image, index) => {
+      return {
+        number: index,
+        header: "",
+        text: "",
+        imageB64: image,
+      };
+    });
+    setFormData((values) => ({
+      ...values,
+      calendarCells: tmpCalCells,
+      daysDuration: tmpCalCells.length,
+    }));
+
+    console.log("added ");
+  }, [adventEncodedImages]);
   const handleSubmit = (e) => {
     e.preventDefault();
     const oneDay = 1000 * 60 * 60 * 24;
+    setFormData((values) => ({ ...values, author: inputs.adventAuthor }));
+    setFormData((values) => ({ ...values, title: inputs.adventTitle }));
+    setFormData((values) => ({
+      ...values,
+      startDate: Math.floor(Date.now() / oneDay) - 1,
+    }));
     console.log(
+      /*
       inputs,
       Math.floor(Date.now() / oneDay),
       adventImages.length,
-      adventImages
+      adventImages,
+      adventEncodedImages */
+      formData
     );
+    fetch("https://adventcalendar-legoushka.amvera.io/create", {
+      method: "POST",
+      headers: {
+        Accept: "*/*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => {
+        if (response.status !== 200) {
+          throw new Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((res) => {
+        /*
+          setMessage("We'll be in touch soon.");
+          setStatus("success"); */
+        setNewCalendarUrl(res.generatedId);
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err.toString());
+        /* setStatus("error"); */
+      });
   };
   return (
     <>
@@ -75,6 +147,7 @@ export default function Home() {
                 className="w-full max-w-sm appearance-none border-b-2 border-black bg-[#f5f1e9] py-2 px-4 leading-tight focus:border-[#327d85] focus:outline-none"
                 id="adventTitle"
                 type="text"
+                name="adventTitle"
                 value={inputs.adventTitle || "Memorable moments"}
                 onChange={handleChange}
               />
@@ -94,6 +167,7 @@ export default function Home() {
                 className="w-full max-w-sm appearance-none border-b-2 border-black bg-[#f5f1e9] py-2 px-4 leading-tight focus:border-[#327d85] focus:outline-none"
                 id="adventAuthor"
                 type="text"
+                name="adventAuthor"
                 value={inputs.adventAuthor || "Secret Santa"}
                 onChange={handleChange}
               />
@@ -101,13 +175,12 @@ export default function Home() {
           </div>
           <div className="mx-auto mt-20 grid w-5/6 grid-cols-1 justify-items-center gap-4 sm:grid-cols-2 md:grid-cols-3">
             {adventImages.map((img, index) => {
-              console.log(img);
               return (
                 <div
                   className="bg-slate relative aspect-square w-full overflow-hidden rounded md:w-52"
                   key={index}
                 >
-                  <img src={adventImages[index]} />
+                  <img src={URL.createObjectURL(adventImages[index])} />
                   <input
                     type="file"
                     id={`filechange${index}`}
@@ -158,7 +231,13 @@ export default function Home() {
           </div>
         </form>
         <div>
-          <Link href="/calendar/">TEST CALENDAR</Link>
+          {newCalendarUrl ? (
+            <Link href={"/calendar/" + newCalendarUrl}>Your calendar</Link>
+          ) : (
+            <Link href="/calendar/errors-by-Lalacode-ab1ce556-3432-4806-b625-8ce6eeb2dd8c">
+              TEST CALENDAR
+            </Link>
+          )}
         </div>
       </main>
     </>

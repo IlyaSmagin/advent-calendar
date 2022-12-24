@@ -27,7 +27,7 @@ const Calendar = ({ data }) => {
           <span> {data?.author}</span>
         </h4>
       </header>
-      <main className="mx-auto grid w-5/6 grid-cols-1 justify-items-center gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <main className="mx-auto grid w-5/6 grid-cols-1 justify-items-center gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 mb-12 ">
         {imagesData ? (
           imagesData.calendarCells.map((day, index) => {
             return (

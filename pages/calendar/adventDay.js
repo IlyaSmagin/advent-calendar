@@ -14,19 +14,26 @@ const AdventDay = ({ day, startDay }) => {
     <>
       {day ? (
         <div
-          className="relative aspect-square w-full overflow-hidden rounded md:w-52"
+          className="group relative aspect-square w-full overflow-hidden rounded md:w-52"
           onClick={handleClick}
         >
           <div
-            className="absolute h-full w-full bg-cover "
+            className="absolute h-full w-full bg-cover bg-center"
             style={{
               backgroundImage:
                 "url('data:image/jpeg;base64, " + day.imageB64 + "')",
             }}
           >
-            <p className=" absolute inset-x-4 bottom-4 rounded bg-slate-100/80 p-4 text-lg font-bold">
-              {day.text}
-            </p>
+            {day?.text ? (
+              <p className=" absolute inset-x-4 bottom-4 rounded bg-slate-100/80 p-4 text-lg font-bold">
+                {day.text}
+                {/* TODO DO NOT SHOW OF NO TEXXT */}
+              </p>
+            ) : (
+              <p className="absolute top-4 right-4 rounded bg-slate-100/80 p-4 text-lg font-bold opacity-0 transition-opacity group-hover:opacity-100">
+                {dayIs + day.number - 1}
+              </p>
+            )}
           </div>
           <div
             className={

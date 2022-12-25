@@ -20,14 +20,14 @@ const Calendar = ({ data }) => {
 
   return (
     <>
-      <header className="container m-20 mx-auto flex flex-col items-center justify-center">
+      <header className="container m-20 mx-auto flex flex-col items-center justify-center px-8 text-center">
         <h2 className="block text-6xl">Advent of {data?.title}</h2>
         <h4 className="mt-4 block text-2xl italic">
           from your friend
           <span> {data?.author}</span>
         </h4>
       </header>
-      <main className="mx-auto grid w-5/6 grid-cols-1 justify-items-center gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 mb-12 ">
+      <main className="mx-auto mb-12 grid w-5/6 grid-flow-dense grid-cols-1 justify-items-center gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 ">
         {imagesData ? (
           imagesData.calendarCells.map((day, index) => {
             return (

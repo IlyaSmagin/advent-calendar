@@ -14,7 +14,14 @@ const AdventDay = ({ day, startDay }) => {
     <>
       {day ? (
         <div
-          className="group relative aspect-square w-full overflow-hidden rounded md:w-52"
+          className={
+            `md:full group relative h-full w-full overflow-hidden rounded sm:min-h-[13rem] sm:min-w-[13rem] ` +
+            (day.number % 8 === 0
+              ? "sm:row-span-2"
+              : day.number % 7 === 0
+              ? "sm:col-span-2"
+              : "aspect-square")
+          }
           onClick={handleClick}
         >
           <div

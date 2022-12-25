@@ -6,7 +6,7 @@ const AdventDay = ({ day, startDay }) => {
   const todayIs = Math.round(Date.now() / oneDay);
   const handleClick = (e) => {
     e.preventDefault;
-    if (todayIs > Number(day.number) + Number(startDay)) {
+    if (todayIs >= Number(day.number) + Number(startDay)) {
       setIsOpened((prev) => !prev);
     }
   };

@@ -41,7 +41,7 @@ export default function Home() {
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    setInputs((values) => ({ ...values, [name]: value }));
+    setFormData((values) => ({ ...values, [name]: value }));
   };
 
   function encodeImageFileAsURL(image, index) {
@@ -78,21 +78,20 @@ export default function Home() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const oneDay = 1000 * 60 * 60 * 24;
-    setFormData((values) => ({ ...values, author: inputs.adventAuthor }));
-    setFormData((values) => ({ ...values, title: inputs.adventTitle }));
     setFormData((values) => ({
       ...values,
       startDate: Math.floor(Date.now() / oneDay) - 1,
     }));
-    /*console.log(
+    console.log(
+      /*
 
-      inputs,
+
       Math.floor(Date.now() / oneDay),
       adventImages.length,
       adventImages,
-      adventEncodedImages
+      adventEncodedImages*/
       formData
-    );*/
+    );
     fetch("https://adventcalendar-legoushka.amvera.io/create", {
       method: "POST",
       headers: {
@@ -154,8 +153,8 @@ export default function Home() {
                 className="w-full appearance-none border-b-2 border-black bg-[#f5f1e9] py-2 px-4 leading-tight focus:border-[#327d85] focus:outline-none"
                 id="adventTitle"
                 type="text"
-                name="adventTitle"
-                value={inputs.adventTitle}
+                name="title"
+                value={formData.title}
                 onChange={handleChange}
               />
             </div>
@@ -174,8 +173,8 @@ export default function Home() {
                 className="w-full appearance-none border-b-2 border-black bg-[#f5f1e9] py-2 px-4 leading-tight focus:border-[#327d85] focus:outline-none"
                 id="adventAuthor"
                 type="text"
-                name="adventAuthor"
-                value={inputs.adventAuthor}
+                name="author"
+                value={formData.author}
                 onChange={handleChange}
               />
             </div>
@@ -187,7 +186,10 @@ export default function Home() {
                   className="bg-slate relative aspect-square w-full  max-w-sm overflow-hidden rounded md:w-52"
                   key={index}
                 >
-                  <img src={URL.createObjectURL(adventImages[index])} />
+                  <img
+                    className="h-full w-full bg-cover bg-center"
+                    src={URL.createObjectURL(adventImages[index])}
+                  />
                   <input
                     type="file"
                     id={`filechange${index}`}

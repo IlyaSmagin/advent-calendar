@@ -241,9 +241,17 @@ export default function Home() {
         </form>
         <div>
           {newCalendarUrl ? (
-            <Link href={"/calendar/" + newCalendarUrl}>Your calendar</Link>
+            <Link
+              className="bg-red mx-auto flex-shrink-0 rounded py-3 px-6 text-white"
+              href={"/calendar/" + newCalendarUrl}
+            >
+              Your calendar
+            </Link>
           ) : (
-            <Link href="/calendar/errors-by-Lalacode-ab1ce556-3432-4806-b625-8ce6eeb2dd8c">
+            <Link
+              className="bg-slate mx-auto flex-shrink-0 rounded py-3 px-6 text-black"
+              href="/calendar/errors-by-Lalacode-ab1ce556-3432-4806-b625-8ce6eeb2dd8c"
+            >
               TEST CALENDAR
             </Link>
           )}

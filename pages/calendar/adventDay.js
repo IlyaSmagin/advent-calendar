@@ -1,4 +1,9 @@
 import { useState } from "react";
+import { Rozha_One } from "@next/font/google";
+const christmasFont = Rozha_One({
+  weight: "400",
+  subsets: ["latin"],
+});
 const AdventDay = ({ day, startDay }) => {
   const [isOpened, setIsOpened] = useState(false);
   const oneDay = 1000 * 60 * 60 * 24;
@@ -39,7 +44,12 @@ const AdventDay = ({ day, startDay }) => {
                 {/* TODO DO NOT SHOW OF NO TEXXT */}
               </p>
             ) : (
-              <p className="absolute top-4 right-4 rounded bg-slate-100/80 p-4 text-lg font-bold opacity-0 transition-opacity group-hover:opacity-100">
+              <p
+                className={
+                  "absolute top-4 right-4 rounded bg-slate-100/80 p-4 text-lg font-bold opacity-0 transition-opacity group-hover:opacity-100" +
+                  christmasFont.className
+                }
+              >
                 {day.number + 1}
               </p>
             )}
@@ -55,7 +65,9 @@ const AdventDay = ({ day, startDay }) => {
               (isOpened === false ? " opacity-100" : " opacity-0")
             }
           >
-            <h2 className="text-6xl font-semibold">{day.number + 1}</h2>
+            <h2 className={"text-6xl font-semibold " + christmasFont.className}>
+              {day.number + 1}
+            </h2>
           </div>
         </div>
       ) : (

@@ -14,10 +14,12 @@ export default function Home() {
     adventTitle: "Memorable moments",
     adventAuthor: "Secret Santa",
   });
+
+  const oneDay = 1000 * 60 * 60 * 24;
   const [formData, setFormData] = useState({
     title: "Memorable moments",
     author: "Secret Santa",
-    startDate: 1,
+    startDate: Math.floor(Date.now() / oneDay) - 1,
     daysDuration: 0,
     calendarCells: [],
   });
@@ -40,7 +42,10 @@ export default function Home() {
 
   const handleChange = (event) => {
     const name = event.target.name;
-    const value = event.target.value;
+    let value = event.target.value;
+    if (name === "startDate") {
+      value = Math.floor((new Date(value)) / oneDay) - 1;
+    }
     setFormData((values) => ({ ...values, [name]: value }));
   };
 
@@ -77,11 +82,6 @@ export default function Home() {
   }, [adventEncodedImages]);
   const handleSubmit = (e) => {
     e.preventDefault();
-    const oneDay = 1000 * 60 * 60 * 24;
-    setFormData((values) => ({
-      ...values,
-      startDate: Math.floor(Date.now() / oneDay) - 1,
-    }));
     console.log(
       /*
 
@@ -175,6 +175,25 @@ export default function Home() {
                 type="text"
                 name="author"
                 value={formData.author}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+          <div className="mb-6 w-full max-w-sm md:flex md:max-w-lg md:items-center">
+            <div className="md:w-1/3">
+              <label
+                className="mb-1 block pr-4 text-3xl md:mb-0 md:text-right"
+                htmlFor="adventStartDate"
+              >
+                Starts from:
+              </label>
+            </div>
+            <div className="md:w-2/3">
+              <input
+                className="w-full appearance-none border-b-2 border-black bg-[#f5f1e9] py-2 px-4 leading-tight focus:border-[#327d85] focus:outline-none"
+                id="adventStartDate"
+                type="date"
+                name="startDate"
                 onChange={handleChange}
               />
             </div>

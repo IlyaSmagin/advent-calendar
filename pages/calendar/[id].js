@@ -12,7 +12,6 @@ const Calendar = ({ data }) => {
       .then((imagesData) => {
         /* imagesData.calendarCells.map((day, index) => (day.index = index));
         imagesData.calendarCells.sort((a, b) => 0.5 - Math.random()); */
-
         imagesData.calendarCells.sort(() => Math.random() - 0.5);
         setImagesData(imagesData);
       });

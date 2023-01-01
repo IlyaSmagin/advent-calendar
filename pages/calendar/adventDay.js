@@ -1,9 +1,18 @@
 import { useState } from "react";
 import { Rozha_One } from "@next/font/google";
+import { motion } from "framer-motion";
 const christmasFont = Rozha_One({
   weight: "400",
   subsets: ["latin"],
 });
+
+const item = {
+  show: {
+    opacity: 1,
+    transition: { duration: 0.3 },
+  },
+  hidden: { opacity: 0 },
+};
 const AdventDay = ({ day, startDay }) => {
   const [isOpened, setIsOpened] = useState(false);
   const oneDay = 1000 * 60 * 60 * 24;
@@ -18,7 +27,8 @@ const AdventDay = ({ day, startDay }) => {
   return (
     <>
       {day ? (
-        <div
+        <motion.div
+          variants={item}
           className={
             `md:full group relative h-full w-full overflow-hidden rounded sm:min-h-[13rem] sm:min-w-[13rem] ` +
             (day.number < 5
@@ -69,7 +79,7 @@ const AdventDay = ({ day, startDay }) => {
               {day.number + 1}
             </h2>
           </div>
-        </div>
+        </motion.div>
       ) : (
         <div></div>
       )}

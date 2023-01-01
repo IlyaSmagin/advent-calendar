@@ -1,19 +1,12 @@
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { Inter } from "@next/font/google";
 import { useEffect, useState } from "react";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const [newCalendarUrl, setNewCalendarUrl] = useState(null);
   const [adventImages, setadventImages] = useState([]);
   const [adventEncodedImages, setAdventEncodedImages] = useState([]);
-  const [inputs, setInputs] = useState({
-    adventTitle: "Memorable moments",
-    adventAuthor: "Secret Santa",
-  });
 
   const oneDay = 1000 * 60 * 60 * 24;
   const [formData, setFormData] = useState({
@@ -44,7 +37,7 @@ export default function Home() {
     const name = event.target.name;
     let value = event.target.value;
     if (name === "startDate") {
-      value = Math.floor((new Date(value)) / oneDay) - 1;
+      value = Math.floor(new Date(value) / oneDay) - 1;
     }
     setFormData((values) => ({ ...values, [name]: value }));
   };

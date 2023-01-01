@@ -1,8 +1,24 @@
 import AdventDay from "./adventDay";
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+
+const container = {
+  show: {
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
 
 const Calendar = ({ data }) => {
-  const [imagesData, setImagesData] = useState(null);
+  const [imagesData, setImagesData] = useState({
+    calendarCells: Array.apply(null, Array(data.daysDuration)).map(function (
+      x,
+      i
+    ) {
+      return { number: i + 1, header: "", text: `$(i)`, imageB64: "s" };
+    }),
+  });
 
   useEffect(() => {
     fetch(
@@ -10,8 +26,6 @@ const Calendar = ({ data }) => {
     )
       .then((res) => res.json())
       .then((imagesData) => {
-        /* imagesData.calendarCells.map((day, index) => (day.index = index));
-        imagesData.calendarCells.sort((a, b) => 0.5 - Math.random()); */
         imagesData.calendarCells.sort(() => Math.random() - 0.5);
         setImagesData(imagesData);
       });
@@ -26,7 +40,12 @@ const Calendar = ({ data }) => {
           <span> {data?.author}</span>
         </h4>
       </header>
-      <main className="mx-auto mb-12 grid w-5/6 grid-flow-dense grid-cols-1 justify-items-center gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 ">
+      <motion.main
+        variants={container}
+        initial="hidden"
+        animate="show"
+        className="mx-auto mb-12 grid w-5/6 grid-flow-dense grid-cols-1 justify-items-center gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 "
+      >
         {imagesData ? (
           imagesData.calendarCells.map((day, index) => {
             return (
@@ -38,7 +57,7 @@ const Calendar = ({ data }) => {
             Loading
           </div>
         )}
-      </main>
+      </motion.main>
     </>
   );
 };

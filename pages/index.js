@@ -1,5 +1,4 @@
 import Head from "next/head";
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -29,8 +28,11 @@ export default function Home() {
     setadventImages(replaceImg);
   }
   function handleAdd(e) {
-    encodeImageFileAsURL(e.target.files[0], adventImages.length);
-    setadventImages((list) => [...list, e.target.files[0]]);
+    for (let juk = 0; juk < e.target.files.length; juk++) {
+      const imageToAdd = e.target.files[juk];
+      encodeImageFileAsURL(imageToAdd, juk);
+      setadventImages((list) => [...list, imageToAdd]);
+    }
   }
 
   const handleChange = (event) => {
@@ -191,7 +193,7 @@ export default function Home() {
               />
             </div>
           </div>
-          <div className="mx-auto mt-20 grid w-5/6 grid-cols-1 place-items-center justify-items-center gap-4 sm:grid-cols-2 md:grid-cols-3">
+          <div className="mx-auto mt-20 flex w-5/6 flex-wrap items-center justify-center gap-4">
             {adventImages.map((img, index) => {
               return (
                 <div
@@ -220,16 +222,17 @@ export default function Home() {
               );
             })}
             <div className="bg-slate aspect-square w-full max-w-sm overflow-hidden rounded md:w-52">
-              <input
-                type="file"
-                id="fileadd"
-                onChange={handleAdd}
-                className="hidden"
-              />
               <label
                 htmlFor="fileadd"
-                className="flex h-full w-full cursor-pointer items-center justify-center text-center"
+                className="relative flex h-full w-full cursor-pointer items-center justify-center text-center"
               >
+                <input
+                  type="file"
+                  id="fileadd"
+                  onChange={handleAdd}
+                  className="absolute inset-0 z-10 opacity-0"
+                  multiple="multiple"
+                />
                 <div>
                   <span className="mb-2 block text-xl font-semibold ">
                     Drop files here

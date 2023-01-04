@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [newCalendarUrl, setNewCalendarUrl] = useState(null);
   const [adventImages, setadventImages] = useState([]);
+  const [send, setSend] = useState(false);
   const [adventEncodedImages, setAdventEncodedImages] = useState([]);
 
   const oneDay = 1000 * 60 * 60 * 24;
@@ -18,8 +19,8 @@ export default function Home() {
   function handleUpdate(e, indexToChange) {
     const replaceImg = adventImages.map((image, index) => {
       if (indexToChange === index) {
-        encodeImageFileAsURL(e.target.files[0], index);
-        return URL.createObjectURL(e.target.files[0]);
+        encodeImageFileAsURL(e.target.files[0], indexToChange);
+        return e.target.files[0];
       } else {
         // The rest haven't changed
         return image;
@@ -28,9 +29,10 @@ export default function Home() {
     setadventImages(replaceImg);
   }
   function handleAdd(e) {
+    const lengthOfArray = adventImages.length;
     for (let juk = 0; juk < e.target.files.length; juk++) {
       const imageToAdd = e.target.files[juk];
-      encodeImageFileAsURL(imageToAdd, juk);
+      encodeImageFileAsURL(imageToAdd, lengthOfArray + juk);
       setadventImages((list) => [...list, imageToAdd]);
     }
   }
@@ -47,36 +49,32 @@ export default function Home() {
   function encodeImageFileAsURL(image, index) {
     let reader = new FileReader();
     reader.onloadend = function () {
-      const base64String = reader.result
-        .replace("data:", "")
-        .replace(/^.+,/, "");
-      setAdventEncodedImages((encodedArray) => [
-        ...encodedArray,
-        (encodedArray.index = base64String),
-      ]);
-      console.log("encoded", index);
+      const base64String =
+        reader.result.replace("data:", "").replace(/^.+,/, "") || ""; //undefined?
+      setAdventEncodedImages((prevEncoded) => {
+        let newprev = [...prevEncoded];
+        newprev[index] = base64String;
+        return newprev;
+      });
     };
     reader.readAsDataURL(image);
   }
   useEffect(() => {
-    let tmpCalCells = adventEncodedImages.map((image, index) => {
-      return {
+    setFormData((values) => ({
+      ...values,
+      calendarCells: adventEncodedImages.map((image, index) => ({
         number: index,
         header: "",
         text: "",
         imageB64: image,
-      };
-    });
-    setFormData((values) => ({
-      ...values,
-      calendarCells: tmpCalCells,
-      daysDuration: tmpCalCells.length,
+      })),
+      daysDuration: adventEncodedImages.length,
     }));
-
-    console.log("added ");
   }, [adventEncodedImages]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    setSend(true);
     console.log(
       /*
 
@@ -96,6 +94,7 @@ export default function Home() {
       body: JSON.stringify(formData),
     })
       .then((response) => {
+        setSend(false);
         if (response.status !== 200) {
           throw new Error(response.statusText);
         }
@@ -202,7 +201,7 @@ export default function Home() {
                 >
                   <img
                     className="h-full w-full bg-cover bg-center"
-                    src={URL.createObjectURL(adventImages[index])}
+                    src={URL.createObjectURL(img)}
                   />
                   <input
                     type="file"
@@ -231,7 +230,7 @@ export default function Home() {
                   id="fileadd"
                   onChange={handleAdd}
                   className="absolute inset-0 z-10 opacity-0"
-                  multiple="multiple"
+                  multiple={true}
                 />
                 <div>
                   <span className="mb-2 block text-xl font-semibold ">
@@ -250,7 +249,7 @@ export default function Home() {
               className="bg-green mx-auto flex-shrink-0 rounded py-3 px-6 text-white"
               type="submit"
             >
-              Create calendar
+              {!send ? "Create calendar" : "Creating your calendar"}
             </button>
           </div>
         </form>

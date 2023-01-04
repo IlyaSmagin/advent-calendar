@@ -120,7 +120,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <header className="container m-20 mx-auto flex flex-col items-center justify-center text-center">
+      <header className="container m-10 mx-auto flex flex-col items-center justify-center text-center">
         <h2 className="block text-4xl font-semibold md:text-6xl">
           Create custom advent calendar
         </h2>
@@ -192,7 +192,7 @@ export default function Home() {
               />
             </div>
           </div>
-          <div className="mx-auto mt-20 flex w-5/6 flex-wrap items-center justify-center gap-4">
+          <div className="mx-auto my-10 flex w-5/6 flex-wrap items-center justify-center gap-4">
             {adventImages.map((img, index) => {
               return (
                 <div
@@ -244,7 +244,7 @@ export default function Home() {
               </label>
             </div>
           </div>
-          <div className="mb-6 mt-20 flex items-center">
+          <div className="mb-6 flex items-center">
             <button
               className="bg-green mx-auto flex-shrink-0 rounded py-3 px-6 text-white"
               type="submit"
